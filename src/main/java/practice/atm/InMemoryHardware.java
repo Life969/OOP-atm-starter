@@ -2,6 +2,8 @@ package practice.atm;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 /**
  * Observable in-memory hardware for tests and local experiments.
@@ -13,7 +15,7 @@ import java.util.Objects;
 public final class InMemoryHardware implements Hardware {
 
     private final int[] counts;
-    private int readCalls;
+    private final AtomicInteger readCalls = new AtomicInteger();
     private int giveCalls;
 
     public InMemoryHardware(int[] initialCounts) {
@@ -29,15 +31,44 @@ public final class InMemoryHardware implements Hardware {
 
     @Override
     public int[] getBillsCounts() {
-        readCalls += 1;
+        readCalls.incrementAndGet();
         return counts.clone();
     }
 
     @Override
     public void giveBills(int[] billsCounts) {
+
+
+        synchronized (this) {
+
+            if (billsCounts == null) {
+                throw new IllegalArgumentException("список купюр пуст");
+            }
+
+            if (billsCounts.length != counts.length) {
+                throw new IllegalArgumentException("списки количества купюр не равны");
+            }
+
+            if (Arrays.stream(billsCounts).anyMatch(count -> count < 0)) {
+                throw new IllegalArgumentException("Количество купюр не может быть отрицательным," +
+                        " в списке есть отрицательное число");
+            }
+
+            if (IntStream.range(0, billsCounts.length)
+                    .anyMatch(i -> billsCounts[i] > counts[i])){
+                throw new IllegalArgumentException("Не хватает купюр");
+            }
+
+                for (int i = 0; i < billsCounts.length; i++) {
+                    counts[i] -= billsCounts[i];
+                }
+
+                giveCalls++;
+
+        }
+
         // TODO(студент): полностью провалидировать команду перед изменением любого количества.
         // TODO(студент): атомарно вычесть выбранные купюры и увеличить giveCalls.
-        throw new UnsupportedOperationException("Задача студента");
     }
 
     public int[] currentCounts() {
@@ -45,7 +76,7 @@ public final class InMemoryHardware implements Hardware {
     }
 
     public int readCalls() {
-        return readCalls;
+        return readCalls.get();
     }
 
     public int giveCalls() {
