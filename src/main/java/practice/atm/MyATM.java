@@ -2,7 +2,9 @@ package practice.atm;
 
 import java.util.Objects;
 
-/** Coordinates validation, local planning and the final hardware commit. */
+/**
+ * Coordinates validation, local planning and the final hardware commit.
+ */
 
 /* Кассир - проверяет сумму, смотрит остатки, формирует заявку, и выдает */
 public final class MyATM {
@@ -18,13 +20,13 @@ public final class MyATM {
 
     public boolean withdraw(int amount) {
         if (amount <= 0) {
-            return false;
+            throw new IllegalArgumentException("Сумма должна быть больше нуля");
         }
         if (amount % DENOMINATIONS[0] != 0) {
-            return false;
+            throw new IllegalArgumentException("Сумма для съема должна быть кратна наименьшей купюре");
         }
         int[] billsCounts = hardware.getBillsCounts(); // остаток купюр в банкомате
-        int [] plan = new int[DENOMINATIONS.length]; // план
+        int[] plan = new int[DENOMINATIONS.length]; // план
         int remaining = amount; // остаток суммы после вычитания
 
         for (int i = DENOMINATIONS.length - 1; i >= 0; i--) {
@@ -37,17 +39,13 @@ public final class MyATM {
         }
 
         if (remaining != 0) {
-            return false;
+            return false; // Не смогли собрать сумму
         }
 
         WithdrawalPlan wp = WithdrawalPlan.of(DENOMINATIONS, plan);
         hardware.giveBills(wp.billCounts());
         return true;
 
-
-        // TODO(студент): отклонить некорректную сумму до обращения к аппаратной части.
-        // TODO(студент): прочитать один снимок состояния и построить локальный план от крупных купюр к мелким.
-        // TODO(студент): вызвать giveBills только после того, как полная сумма будет распланирована.
 
     }
 }

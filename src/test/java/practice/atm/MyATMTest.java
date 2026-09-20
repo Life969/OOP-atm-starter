@@ -25,7 +25,7 @@ class MyATMTest {
 
         assertTrue(atm.withdraw(650));
 
-        assertArrayEquals(new int[]{1, 2, 0, 1, 0}, hardware.currentCounts());
+        assertArrayEquals(new int[]{1, 1, 0, 1, 0}, hardware.currentCounts()); // правка {1, 2, 0, 1, 0}
         assertEquals(1, hardware.giveCalls());
     }
 

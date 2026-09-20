@@ -54,11 +54,12 @@ class EquivalenceClassesTest {
     @Test
     @DisplayName("student adds one new class before declaring the suite complete")
     void addOneNewEquivalenceClass() {
-        // STUDENT_TASK: replace this representative with a class not covered above.
-        InMemoryHardware hardware = new InMemoryHardware(new int[]{2, 0, 0, 0, 0});
+        InMemoryHardware hardware = new InMemoryHardware(new int[]{3, 1, 0, 0, 0});
         MyATM atm = new MyATM(hardware);
 
-        assertTrue(atm.withdraw(100));
+        assertTrue(atm.withdraw(250));
         assertArrayEquals(new int[]{0, 0, 0, 0, 0}, hardware.currentCounts());
+
+
     }
 }

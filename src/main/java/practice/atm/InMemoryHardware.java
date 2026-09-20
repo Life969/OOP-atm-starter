@@ -42,7 +42,7 @@ public final class InMemoryHardware implements Hardware {
         synchronized (this) {
 
             if (billsCounts == null) {
-                throw new IllegalArgumentException("список купюр пуст");
+                throw new NullPointerException("список купюр пуст");
             }
 
             if (billsCounts.length != counts.length) {
@@ -67,8 +67,6 @@ public final class InMemoryHardware implements Hardware {
 
         }
 
-        // TODO(студент): полностью провалидировать команду перед изменением любого количества.
-        // TODO(студент): атомарно вычесть выбранные купюры и увеличить giveCalls.
     }
 
     public int[] currentCounts() {
