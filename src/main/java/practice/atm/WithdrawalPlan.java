@@ -1,0 +1,70 @@
+package practice.atm;
+
+
+import practice.atm.atmExceptions.InvalidPlanException;
+
+/**
+ * Неизменяемый value object, описывающий одно полное снятие наличных.
+ *
+ * <p>Задача студента: выполнить валидацию, защитные копии и вычисление суммы.
+ */
+
+/* Здесь составляется заявка на выдачу (номинал и количество купюр)*/
+public final class WithdrawalPlan {
+
+    private final int[] denominations;
+    private final int[] billCounts;
+
+    private WithdrawalPlan(int[] denominations, int[] billCounts) {
+
+
+        this.denominations = denominations.clone();
+        this.billCounts = billCounts.clone();
+    }
+
+    public static WithdrawalPlan of(int[] denominations, int[] billCounts) {
+
+        if (denominations == null || billCounts == null) {
+            throw new NullPointerException("Список номиналов " +
+                    "или список оставшихся купюр не может быть пустым");
+        }
+
+        if (denominations.length != billCounts.length) {
+            throw new InvalidPlanException("Количество списка номиналов не совпадает" +
+                    " с количеством списка оставшихся купюр");
+        }
+
+
+        for (int i = 0; i < denominations.length; i++) {
+            if (denominations[i] <= 0) {
+                throw new InvalidPlanException("Номинал должен быть больше 0");
+            }
+
+            if (billCounts[i] < 0) {
+                throw new InvalidPlanException("Количество купюр не может быть отрицательным");
+            }
+
+        }
+
+
+        return new WithdrawalPlan(denominations, billCounts);
+    }
+
+    public int[] billCounts() {
+
+        return billCounts.clone();
+
+    }
+
+    public long totalAmount() {
+        long total = 0;
+        for (int i = 0; i < denominations.length; i++) {
+
+                long product = Math.multiplyExact((long)denominations[i], billCounts[i]);
+                total = Math.addExact(total, product);
+
+        }
+        return total;
+
+    }
+}
