@@ -2,6 +2,8 @@ package practice.atm;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import practice.atm.atmExceptions.InsufficientBillsException;
+import practice.atm.atmExceptions.InvalidBillsException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +27,7 @@ public class InMemoryHardwareTest {
     void incorrectLength(){
         InMemoryHardware hardware = new InMemoryHardware(new int[]{1, 1, 1, 1, 1});
 
-        assertThrows(IllegalArgumentException.class, () -> hardware.giveBills(new int[]{1, 1, 1}));
+        assertThrows(InvalidBillsException.class, () -> hardware.giveBills(new int[]{1, 1, 1}));
 
         assertArrayEquals(new int[]{1, 1, 1, 1, 1}, hardware.currentCounts());
         assertEquals(0, hardware.giveCalls());
@@ -36,7 +38,7 @@ public class InMemoryHardwareTest {
     void incorrectCounts(){
         InMemoryHardware hardware = new InMemoryHardware(new int[]{1, 1, 1, 1, 1});
 
-        assertThrows(IllegalArgumentException.class, () -> hardware.giveBills(new int[]{0, 1, -1, 1, 1}));
+        assertThrows(InvalidBillsException.class, () -> hardware.giveBills(new int[]{0, 1, -1, 1, 1}));
 
         assertArrayEquals(new int[]{1, 1, 1, 1, 1}, hardware.currentCounts());
         assertEquals(0, hardware.giveCalls());
@@ -47,7 +49,7 @@ public class InMemoryHardwareTest {
     void shortageOfBanknotes(){
         InMemoryHardware hardware = new InMemoryHardware(new int[]{1, 1, 1, 1, 1});
 
-        assertThrows(IllegalArgumentException.class, () -> hardware.giveBills(new int[]{1, 1, 1, 1, 2}));
+        assertThrows(InsufficientBillsException.class, () -> hardware.giveBills(new int[]{1, 1, 1, 1, 2}));
 
         assertArrayEquals(new int[]{1, 1, 1, 1, 1}, hardware.currentCounts());
         assertEquals(0, hardware.giveCalls());

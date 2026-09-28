@@ -12,6 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import practice.atm.atmExceptions.InvalidAmountException;
 
 class EquivalenceClassesTest {
 
@@ -22,7 +23,7 @@ class EquivalenceClassesTest {
         InMemoryHardware hardware = new InMemoryHardware(new int[]{1, 1, 1, 1, 1});
         MyATM atm = new MyATM(hardware);
 
-        assertThrows(IllegalArgumentException.class, () -> atm.withdraw(amount));
+        assertThrows(InvalidAmountException.class, () -> atm.withdraw(amount));
         assertEquals(0, hardware.readCalls());
         assertEquals(0, hardware.giveCalls());
     }

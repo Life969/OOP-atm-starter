@@ -1,6 +1,8 @@
 package practice.atm;
 
 
+import practice.atm.atmExceptions.InvalidPlanException;
+
 /**
  * Неизменяемый value object, описывающий одно полное снятие наличных.
  *
@@ -28,18 +30,18 @@ public final class WithdrawalPlan {
         }
 
         if (denominations.length != billCounts.length) {
-            throw new IllegalArgumentException("Количество списка номиналов не совпадает" +
+            throw new InvalidPlanException("Количество списка номиналов не совпадает" +
                     " с количеством списка оставшихся купюр");
         }
 
 
         for (int i = 0; i < denominations.length; i++) {
             if (denominations[i] <= 0) {
-                throw new IllegalArgumentException("Номинал должен быть больше 0");
+                throw new InvalidPlanException("Номинал должен быть больше 0");
             }
 
             if (billCounts[i] < 0) {
-                throw new IllegalArgumentException("Количество купюр должно быть положительным");
+                throw new InvalidPlanException("Количество купюр не может быть отрицательным");
             }
 
         }

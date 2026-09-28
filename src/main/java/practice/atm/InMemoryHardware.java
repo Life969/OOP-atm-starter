@@ -1,5 +1,9 @@
 package practice.atm;
 
+import practice.atm.atmExceptions.InsufficientBillsException;
+import practice.atm.atmExceptions.InvalidBillsException;
+import practice.atm.atmExceptions.InvalidPlanException;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,10 +25,10 @@ public final class InMemoryHardware implements Hardware {
     public InMemoryHardware(int[] initialCounts) {
         Objects.requireNonNull(initialCounts, "initialCounts");
         if (initialCounts.length != MyATM.DENOMINATIONS.length) {
-            throw new IllegalArgumentException("Expected one count per denomination");
+            throw new InvalidBillsException("Expected one count per denomination");
         }
         if (Arrays.stream(initialCounts).anyMatch(count -> count < 0)) {
-            throw new IllegalArgumentException("Bill count cannot be negative");
+            throw new InvalidBillsException("Bill count cannot be negative");
         }
         this.counts = initialCounts.clone();
     }
@@ -46,17 +50,17 @@ public final class InMemoryHardware implements Hardware {
             }
 
             if (billsCounts.length != counts.length) {
-                throw new IllegalArgumentException("списки количества купюр не равны");
+                throw new InvalidBillsException("списки количества купюр не равны");
             }
 
             if (Arrays.stream(billsCounts).anyMatch(count -> count < 0)) {
-                throw new IllegalArgumentException("Количество купюр не может быть отрицательным," +
+                throw new InvalidBillsException("Количество купюр не может быть отрицательным," +
                         " в списке есть отрицательное число");
             }
 
             if (IntStream.range(0, billsCounts.length)
                     .anyMatch(i -> billsCounts[i] > counts[i])){
-                throw new IllegalArgumentException("Не хватает купюр");
+                throw new InsufficientBillsException("Не хватает купюр");
             }
 
                 for (int i = 0; i < billsCounts.length; i++) {

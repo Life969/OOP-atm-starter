@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import practice.atm.atmExceptions.InvalidPlanException;
 
 class WithdrawalPlanTest {
 
@@ -15,7 +16,7 @@ class WithdrawalPlanTest {
         assertThrows(NullPointerException.class, () -> WithdrawalPlan.of(null, new int[5]));
         assertThrows(NullPointerException.class, () -> WithdrawalPlan.of(new int[5], null));
         assertThrows(
-                IllegalArgumentException.class,
+                InvalidPlanException.class,
                 () -> WithdrawalPlan.of(new int[]{50, 100}, new int[]{1})
         );
     }
@@ -53,7 +54,7 @@ class WithdrawalPlanTest {
     @DisplayName("negative bill count is outside the value-object contract")
     void rejectsNegativeBillCount() {
         assertThrows(
-                IllegalArgumentException.class,
+                InvalidPlanException.class,
                 () -> WithdrawalPlan.of(
                         new int[]{50, 100, 500, 1000, 5000},
                         new int[]{0, -1, 0, 0, 0}

@@ -1,5 +1,7 @@
 package practice.atm;
 
+import practice.atm.atmExceptions.InvalidAmountException;
+
 import java.util.Objects;
 
 /**
@@ -20,10 +22,10 @@ public final class MyATM {
 
     public boolean withdraw(int amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("Сумма должна быть больше нуля");
+            throw new InvalidAmountException("Сумма должна быть больше нуля");
         }
         if (amount % DENOMINATIONS[0] != 0) {
-            throw new IllegalArgumentException("Сумма для съема должна быть кратна наименьшей купюре");
+            throw new InvalidAmountException("Сумма для съема должна быть кратна наименьшей купюре");
         }
         int[] billsCounts = hardware.getBillsCounts(); // остаток купюр в банкомате
         int[] plan = new int[DENOMINATIONS.length]; // план
