@@ -59,10 +59,12 @@ public final class WithdrawalPlan {
     public long totalAmount() {
         long total = 0;
         for (int i = 0; i < denominations.length; i++) {
-            total += (long) denominations[i] * billCounts[i];
+
+                long product = Math.multiplyExact((long)denominations[i], billCounts[i]);
+                total = Math.addExact(total, product);
+
         }
         return total;
-
 
     }
 }

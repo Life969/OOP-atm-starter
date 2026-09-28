@@ -61,4 +61,17 @@ class WithdrawalPlanTest {
                 )
         );
     }
+
+    @Test
+    @DisplayName("проверка переполнения")
+    void overflowСheck(){
+        int m = Integer.MAX_VALUE;
+
+        WithdrawalPlan plan = WithdrawalPlan.of(
+                new int[]{m, m, m},
+                new int[]{m, m, m}
+        );
+
+        assertThrows(ArithmeticException.class, plan::totalAmount);
+    }
 }
